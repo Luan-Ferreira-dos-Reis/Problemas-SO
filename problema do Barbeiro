@@ -1,0 +1,61 @@
+from threading import Thread, Lock
+from threading import Condition
+from random import randint
+from time import sleep
+import sys
+
+#número de barbeiros, cadeiras, clientes nas cadeiras e clientes que foram embora
+BARBEIROS = 5
+CADEIRAS = 2
+CLIENTES = 0
+FOI_EMBORA = 0
+
+#tempo máximo de corte e de chegada de clientes(segundos)
+temp_corte = 1
+temp_chegada = 1
+
+def entrada_cliente():
+    global temp_corte
+    global CLIENTES
+    global FOI_EMBORA
+    global CADEIRAS
+    while(True):
+        tempo = randint(0, temp_chegada)
+        sleep(tempo)
+        if(CLIENTES<CADEIRAS):
+            CLIENTES+=1
+            print("cliente chegou, clientes: ",CLIENTES)
+        else:
+            FOI_EMBORA += 1
+            print("cliente foi embora, perdidos: ",FOI_EMBORA)
+
+def corte_cabelo(i):
+    global temp_corte
+    global CLIENTES
+    while (True):
+        mutex.acquire()
+        if(CLIENTES>0):
+            CLIENTES -=1
+            print("barbeiro ",i,"corte concluido, clientes : ",CLIENTES)
+        mutex.release()
+        tempo = randint(0, temp_corte)
+        sleep(tempo)
+
+
+
+
+mutex = Lock()
+
+#entrada de clientes
+ent_cliente = Thread(target=entrada_cliente, args=())
+ent_cliente.start()
+
+
+#entrada de barbeiros
+barbeiros = []
+for i in range(BARBEIROS):
+    barbeiros.append(Thread(target=corte_cabelo, args=[i]))
+    barbeiros[i].start()
+
+
+
