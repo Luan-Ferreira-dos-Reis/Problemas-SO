@@ -1,18 +1,27 @@
 from threading import Thread, Lock
-from threading import Condition
 from random import randint
 from time import sleep
-import sys
 
-#número de barbeiros, cadeiras, clientes nas cadeiras e clientes que foram embora
-BARBEIROS = 5
-CADEIRAS = 2
+#número de barbeiros, cadeiras, clientes nas cadeiras e clientes que foram embora e total de atendidos
+BARBEIROS = 3
+CADEIRAS = 5
 CLIENTES = 0
 FOI_EMBORA = 0
+ATENDIDOS = 0
 
-#tempo máximo de corte e de chegada de clientes(segundos)
-temp_corte = 1
-temp_chegada = 1
+#tempo (máximo e mínimo) de corte e de chegada de clientes(segundos)
+temp_corte_max = 5
+temp_corte_min = 1
+temp_chegada_max = 2
+temp_chegada_min = 1
+
+#atendidos por cada barbeiro
+atendidos = []
+for i in range(BARBEIROS):
+    atendidos.append(0)
+
+#semaforo controla o ato do barbeiro olhar se tem cliente esperando
+mutex = Lock()
 
 def entrada_cliente():
     global temp_corte
@@ -20,7 +29,7 @@ def entrada_cliente():
     global FOI_EMBORA
     global CADEIRAS
     while(True):
-        tempo = randint(0, temp_chegada)
+        tempo = randint(temp_chegada_min, temp_chegada_max)
         sleep(tempo)
         if(CLIENTES<CADEIRAS):
             CLIENTES+=1
@@ -32,19 +41,22 @@ def entrada_cliente():
 def corte_cabelo(i):
     global temp_corte
     global CLIENTES
+    global ATENDIDOS
+    global atendidos
     while (True):
         mutex.acquire()
         if(CLIENTES>0):
             CLIENTES -=1
-            print("barbeiro ",i,"corte concluido, clientes : ",CLIENTES)
+            ATENDIDOS +=1
+            atendidos[i] +=1
+            print("barbeiro ",i,"corte concluido, atendidos : (",atendidos[i],"/",ATENDIDOS,")")
         mutex.release()
-        tempo = randint(0, temp_corte)
+        #cortando o cabelo do cliente
+        tempo = randint(temp_corte_min, temp_corte_max)
         sleep(tempo)
 
 
 
-
-mutex = Lock()
 
 #entrada de clientes
 ent_cliente = Thread(target=entrada_cliente, args=())
@@ -59,3 +71,8 @@ for i in range(BARBEIROS):
 
 
 
+
+
+
+
+#Luan Ferreira dos Reis
