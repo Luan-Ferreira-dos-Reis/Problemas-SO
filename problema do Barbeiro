@@ -24,7 +24,8 @@ for i in range(BARBEIROS):
 mutex = Lock()
 
 def entrada_cliente():
-    global temp_corte
+    global temp_corte_max
+    global temp_corte_min
     global CLIENTES
     global FOI_EMBORA
     global CADEIRAS
@@ -39,7 +40,8 @@ def entrada_cliente():
             print("cliente foi embora, perdidos: ",FOI_EMBORA)
 
 def corte_cabelo(i):
-    global temp_corte
+    global temp_chegada_max
+    global temp_chegada_min
     global CLIENTES
     global ATENDIDOS
     global atendidos
