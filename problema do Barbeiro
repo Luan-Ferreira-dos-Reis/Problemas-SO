@@ -3,16 +3,16 @@ from random import randint
 from time import sleep
 
 #número de barbeiros, cadeiras, clientes nas cadeiras e clientes que foram embora e total de atendidos
-BARBEIROS = 3
-CADEIRAS = 5
+BARBEIROS = 2
+CADEIRAS = 3
 CLIENTES = 0
 FOI_EMBORA = 0
 ATENDIDOS = 0
 
 #tempo (máximo e mínimo) de corte e de chegada de clientes(segundos)
-temp_corte_max = 5
-temp_corte_min = 1
-temp_chegada_max = 2
+temp_corte_max = 10
+temp_corte_min = 2
+temp_chegada_max = 4
 temp_chegada_min = 1
 
 #atendidos por cada barbeiro
@@ -33,7 +33,7 @@ def entrada_cliente():
         sleep(tempo)
         if(CLIENTES<CADEIRAS):
             CLIENTES+=1
-            print("cliente chegou, clientes: ",CLIENTES)
+            print("cliente chegou, clientes esperando: ",CLIENTES)
         else:
             FOI_EMBORA += 1
             print("cliente foi embora, perdidos: ",FOI_EMBORA)
